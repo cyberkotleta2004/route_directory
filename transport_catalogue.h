@@ -8,7 +8,7 @@
 namespace transport_catalogue {
     struct Stop {
         std::string name_;
-        Coordinates coordinates_;
+        geo::Coordinates coordinates_;
     };
 
     class Route {
@@ -19,9 +19,20 @@ namespace transport_catalogue {
         double route_length_;
         std::vector<Stop*> route_;
     public: 
+        Route(std::string_view name, std::vector<Stop*>&& route)
+            : name_(name)
+            , stops_count_(route.size() + 1)
+            , unique_stops_count_(CountUniqueStopsCount(route))
+            , route_length_(CountRouteLength(route))
+            , route_(std::move(route))
+        {}
+            
         double GetRouteLength() const noexcept;
         size_t GetStopsCount() const noexcept;
         size_t GetUniqueStopsCount() const noexcept;
+    private:
+        size_t CountUniqueStopsCount(const std::vector<Stop*>& route);
+        double CountRouteLength(const std::vector<Stop*>& route);
     };
 
     class TransportCatalogue {
@@ -36,6 +47,5 @@ namespace transport_catalogue {
         void AddStop(Stop&& stop);
         Route& GetRoute(const std::string& route_name) const;
         Stop& GetStop(const std::string& stop_name) const;
-        ??? GetRouteInfo(const std::string& stop_name) const;
     };
 };
