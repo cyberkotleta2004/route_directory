@@ -1,5 +1,0 @@
-#include <list>
-
-int main() {
-    
-}

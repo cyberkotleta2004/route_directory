@@ -2,15 +2,19 @@
 #include <unordered_set>
 
 namespace transport_catalogue {
-    Route::Route(std::string_view name, std::vector<const Stop*>&& route)
+    Route::Route(const std::string& name, std::vector<const Stop*>&& route)
         : name_(name)
-        , stops_count_(route.size() + 1)
         , unique_stops_count_(CountUniqueStopsCount(route))
-        , route_length_(CountRouteLength(route))
+        , stops_count_(route.size())
+        , route_length_(CountLength(route))
         , route_(std::move(route))
     {}
 
-    double Route::GetRouteLength() const noexcept {
+    std::string_view Route::GetName() const noexcept {
+        return name_;
+    }
+ 
+    double Route::GetLength() const noexcept {
         return route_length_;
     }
 
@@ -34,11 +38,11 @@ namespace transport_catalogue {
         return unique_stops_counter;
     }
 
-    double Route::CountRouteLength(const std::vector<const Stop*>& route) const {
+    double Route::CountLength(const std::vector<const Stop*>& route) const {
         double route_length = 0.0;
 
-        for(size_t i = 0; i < route.size() - 1; ++i) {
-            route_length += geo::ComputeDistance(route[i]->coordinates_, route[i + 1]->coordinates_);
+        for(size_t i = 1; i < route.size(); ++i) {
+            route_length += geo::ComputeDistance(route[i - 1]->coordinates_, route[i]->coordinates_);
         }
 
         return route_length;
