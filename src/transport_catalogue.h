@@ -16,6 +16,7 @@ namespace transport_catalogue {
     public:
         void AddStop(Stop&& stop);
         void AddRoute(Route&& route);
+        const Stop& GetStop(std::string_view stop_name) const;
         const Stop& GetStop(const std::string& stop_name) const;
         const Route& GetRoute(const std::string& route_name) const;
         std::string GetRouteInfo(const std::string& route_name) const noexcept;

@@ -1,0 +1,67 @@
+# Сгенерированные бинарные файлы
+*.exe
+*.out
+*.app
+*.so
+*.dll
+*.a
+*.lib
+*.dylib
+
+# Объектные файлы и промежуточные файлы сборки
+*.o
+*.obj
+*.lo
+*.ilk
+*.pdb
+*.slo
+
+# Файлы, созданные CMake и Make
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+Makefile
+cmake_install.cmake
+install_manifest.txt
+*.cmake
+*.ninja
+.ninja_deps
+.ninja_log
+
+# Файлы, созданные IDE (Visual Studio, CLion, Xcode)
+.vscode/
+.idea/
+*.vcxproj*
+*.sln
+*.suo
+*.user
+*.xcodeproj/
+*.xcworkspace/
+xcuserdata/
+
+# Директории сборки (обычно называются build/ или bin/)
+build/
+bin/
+out/
+Debug/
+Release/
+
+# Логи и временные файлы
+*.log
+*.tmp
+*.swp
+*~
+*.bak
+
+# Автогенерируемые файлы документации
+docs/html/
+docs/latex/
+Doxygen/
+
+# Системные файлы (macOS)
+.DS_Store
+._*
+
+# Пакеты зависимости (если не используете git submodules)
+deps/
+third_party/
