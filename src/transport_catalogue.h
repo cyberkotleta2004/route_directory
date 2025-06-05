@@ -1,46 +1,23 @@
 #pragma once
 #include <deque>
-#include <vector>
 #include <unordered_map>
 #include <string>
-#include "geo.h"
+#include "stop.h"
+#include "route.h"
 
 namespace transport_catalogue {
-    struct Stop {
-        std::string name_;
-        geo::Coordinates coordinates_;
-    };
-
-    class Route {
-    private:
-        std::string name_;
-        size_t stops_count_;
-        size_t unique_stops_count_;
-        double route_length_;
-        std::vector<const Stop*> route_;
-    public: 
-        Route(const std::string& name, std::vector<const Stop*>&& route);
-        
-        std::string_view GetName() const noexcept;
-        double GetLength() const noexcept;
-        size_t GetStopsCount() const noexcept;
-        size_t GetUniqueStopsCount() const noexcept;
-    private:
-        size_t CountUniqueStopsCount(const std::vector<const Stop*>& route) const;
-        double CountLength(const std::vector<const Stop*>& route) const;
-    };
-
     class TransportCatalogue {
     private:
         std::deque<Stop> stops_;
-        std::unordered_map<std::string_view, const Stop*> stop_name_to_stop;
+        std::unordered_map<std::string_view, const Stop*> stop_name_to_stop_;
         std::deque<Route> routes_;
-        std::unordered_map<std::string_view, const Route*> route_name_to_route;
+        std::unordered_map<std::string_view, const Route*> route_name_to_route_;
 
     public:
-        void AddRoute(Route&& route);
         void AddStop(Stop&& stop);
-        Route& GetRoute(const std::string& route_name) const;
-        Stop& GetStop(const std::string& stop_name) const;
+        void AddRoute(Route&& route);
+        const Stop& GetStop(const std::string& stop_name) const;
+        const Route& GetRoute(const std::string& route_name) const;
+        std::string GetRouteInfo(const std::string& route_name) const noexcept;
     };
 };
