@@ -3,15 +3,13 @@
 #include "../src/transport_catalogue.h"
 #include <sstream>
 
-using namespace std::string_view_literals;
-
 TEST_CASE("Test stream input", "[input_reader]") {
     std::istringstream iss(
         "10\n"
         "Stop Tolstopaltsevo: 55.611087, 37.208290\n"
         "Stop Marushkino: 55.595884, 37.209755\n"
         "Bus 256: Biryulyovo Zapadnoye > Biryusinka > Universam > Biryulyovo Tovarnaya > Biryulyovo Passazhirskaya > Biryulyovo Zapadnoye\n"
-        "Bus 750: Tolstopaltsevo - Marushkino - Tolstopaltsevo\n"
+        "Bus 750: Tolstopaltsevo > Marushkino > Tolstopaltsevo\n"
         "Stop Rasskazovka: 55.632761, 37.333324\n"
         "Stop Biryulyovo Zapadnoye: 55.574371, 37.651700\n"
         "Stop Biryusinka: 55.581065, 37.648390\n"
@@ -23,14 +21,14 @@ TEST_CASE("Test stream input", "[input_reader]") {
     auto catalogue = transport_catalogue::ReadTransportCatalogueCreateRequests(iss);
 
     SECTION("GetStop return correct coordinates") {
-        const auto& stop = catalogue.GetStop("Tolstopaltsevo"sv);
+        const auto& stop = catalogue.GetStop("Tolstopaltsevo");
         REQUIRE(stop.name_ == "Tolstopaltsevo");
         REQUIRE(stop.coordinates_.lat == Catch::Approx(55.611087).epsilon(1e-3));
         REQUIRE(stop.coordinates_.lng == Catch::Approx(37.208290).epsilon(1e-3));
     }
 
     SECTION("GetStop throws for nonexistent stop") {
-        REQUIRE_THROWS_AS(catalogue.GetStop("InvalidStop"sv), std::out_of_range);
+        REQUIRE_THROWS_AS(catalogue.GetStop("InvalidStop"), std::out_of_range);
     }
 
     SECTION("GetRoute 750 parsed correctly") {

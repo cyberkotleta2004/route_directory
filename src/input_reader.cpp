@@ -7,15 +7,15 @@ using namespace std::string_literals;
 
 namespace transport_catalogue {
     TransportCatalogue ReadTransportCatalogueCreateRequests(std::istream& in) {
-        size_t create_requests_count;
-        in >> create_requests_count;
+        size_t request_count;
+        in >> request_count;
         in.ignore();
         
         std::vector<std::string> stops_create_requests;
         std::vector<std::string> routes_create_requests;
 
         std::string current_request;
-        for(size_t i = 0; i < create_requests_count; ++i) {
+        for(size_t i = 0; i < request_count; ++i) {
             std::getline(in, current_request);
             if(current_request.starts_with("Stop"s)) {
                 stops_create_requests.push_back(std::move(current_request));
@@ -85,7 +85,7 @@ namespace transport_catalogue {
         std::string_view current_stop;
 
         while(true) {
-            size_t delim_pos = request.find_first_of("->");
+            size_t delim_pos = request.find_first_of(">");
 
             if(delim_pos == std::string::npos) {
                 const Stop* stop_ptr = &transport_catalogue.GetStop(request.substr(0, request.size()));

@@ -20,20 +20,16 @@ namespace transport_catalogue {
         return *stop_name_to_stop_.at(stop_name);
     }
 
-    const Stop& TransportCatalogue::GetStop(const std::string& stop_name) const {
-        return *stop_name_to_stop_.at(std::string_view(stop_name));
+    const Route& TransportCatalogue::GetRoute(std::string_view route_name_sv) const {
+        return *route_name_to_route_.at(route_name_sv);
     }
 
-    const Route& TransportCatalogue::GetRoute(const std::string& route_name) const {
-        return *route_name_to_route_.at(std::string_view(route_name));
-    }
-
-    std::string TransportCatalogue::GetRouteInfo(const std::string& route_name) const noexcept {
+    std::string TransportCatalogue::GetRouteInfo(std::string_view route_name) const noexcept {
         try {
             const Route& route_ref = GetRoute(route_name);
             return std::format(
                 "Bus {}: {} stops on route, {} unique stops, {:.6f} route length\n",
-                route_name, 
+                route_ref.GetName(), 
                 route_ref.GetStopsCount(), 
                 route_ref.GetUniqueStopsCount(),
                 route_ref.GetLength()
