@@ -5,7 +5,6 @@
 constexpr double EPS = 1e-3;
 
 TEST_CASE("Class Route creating correctly", "[route]") {
-    std::string name = "295";
     std::deque<transport_catalogue::Stop> stops = {
         {"Volgina 4", {55.7512, 37.6981}},
         {"Novatorskaya", {55.7112, 37.6971}},
@@ -16,7 +15,7 @@ TEST_CASE("Class Route creating correctly", "[route]") {
     std::vector<const transport_catalogue::Stop*> stops_ptrs = {
         &stops[0], &stops[1], &stops[2], &stops[3], &stops[0]};
 
-    transport_catalogue::Route route(name, std::move(stops_ptrs));
+    transport_catalogue::Route route("295", std::move(stops_ptrs));
 
     REQUIRE(route.GetName() == "295");
     REQUIRE(route.GetStopsCount() == 5);

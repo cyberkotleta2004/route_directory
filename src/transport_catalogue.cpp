@@ -1,50 +1,39 @@
 #include "transport_catalogue.h"
 #include <unordered_set>
+#include <stdexcept>
+#include <format>
 
 namespace transport_catalogue {
-    Route::Route(const std::string& name, std::vector<const Stop*>&& route)
-        : name_(name)
-        , unique_stops_count_(CountUniqueStopsCount(route))
-        , stops_count_(route.size())
-        , route_length_(CountLength(route))
-        , route_(std::move(route))
-    {}
-
-    std::string_view Route::GetName() const noexcept {
-        return name_;
-    }
- 
-    double Route::GetLength() const noexcept {
-        return route_length_;
+    void TransportCatalogue::AddStop(Stop&& stop) {
+        stops_.push_back(std::move(stop));
+        stop_name_to_stop_.insert({stops_.back().name_, &stops_.back()});
     }
 
-    size_t Route::GetStopsCount() const noexcept {
-        return stops_count_;
+    void TransportCatalogue::AddRoute(Route&& route) {
+        routes_.push_back(std::move(route));
+        route_name_to_route_.insert({routes_.back().GetName(), &routes_.back()});
     }
 
-    size_t Route::GetUniqueStopsCount() const noexcept {
-        return unique_stops_count_;
+    const Stop& TransportCatalogue::GetStop(const std::string& stop_name) const {
+        return *stop_name_to_stop_.at(std::string_view(stop_name));
     }
 
-    size_t Route::CountUniqueStopsCount(const std::vector<const Stop*>& route) const {
-        size_t unique_stops_counter = 0;
-        std::unordered_set<const Stop*> unique_stops;
+    const Route& TransportCatalogue::GetRoute(const std::string& route_name) const {
+        return *route_name_to_route_.at(std::string_view(route_name));
+    }
 
-        for(const Stop* stop_ptr : route) {
-            if(unique_stops.contains(stop_ptr)) return unique_stops_counter;
-            unique_stops.insert(stop_ptr);
-            ++unique_stops_counter;
+    std::string TransportCatalogue::GetRouteInfo(const std::string& route_name) const noexcept {
+        try {
+            const Route& route_ref = GetRoute(route_name);
+            return std::format(
+                "Bus {}: {} stops on route, {} unique stops, {:.6f} route length\n",
+                route_name, 
+                route_ref.GetStopsCount(), 
+                route_ref.GetUniqueStopsCount(),
+                route_ref.GetLength()
+            );
+        } catch(const std::out_of_range& except) {
+            return std::format("Bus {}: not found\n", route_name);
         }
-        return unique_stops_counter;
-    }
-
-    double Route::CountLength(const std::vector<const Stop*>& route) const {
-        double route_length = 0.0;
-
-        for(size_t i = 1; i < route.size(); ++i) {
-            route_length += geo::ComputeDistance(route[i - 1]->coordinates_, route[i]->coordinates_);
-        }
-
-        return route_length;
     }
 }
