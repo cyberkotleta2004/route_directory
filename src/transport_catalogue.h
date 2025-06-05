@@ -19,14 +19,15 @@ namespace transport_catalogue {
         double route_length_;
         std::vector<const Stop*> route_;
     public: 
-        Route(std::string_view name, std::vector<const Stop*>&& route);
-            
-        double GetRouteLength() const noexcept;
+        Route(const std::string& name, std::vector<const Stop*>&& route);
+        
+        std::string_view GetName() const noexcept;
+        double GetLength() const noexcept;
         size_t GetStopsCount() const noexcept;
         size_t GetUniqueStopsCount() const noexcept;
     private:
         size_t CountUniqueStopsCount(const std::vector<const Stop*>& route) const;
-        double CountRouteLength(const std::vector<const Stop*>& route) const;
+        double CountLength(const std::vector<const Stop*>& route) const;
     };
 
     class TransportCatalogue {
