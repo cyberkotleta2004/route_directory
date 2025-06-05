@@ -11,7 +11,7 @@ TEST_CASE("Test stream input", "[input_reader]") {
         "Stop Tolstopaltsevo: 55.611087, 37.208290\n"
         "Stop Marushkino: 55.595884, 37.209755\n"
         "Bus 256: Biryulyovo Zapadnoye > Biryusinka > Universam > Biryulyovo Tovarnaya > Biryulyovo Passazhirskaya > Biryulyovo Zapadnoye\n"
-        "Bus 750: Tolstopaltsevo - Marushkino - Rasskazovka\n"
+        "Bus 750: Tolstopaltsevo - Marushkino - Tolstopaltsevo\n"
         "Stop Rasskazovka: 55.632761, 37.333324\n"
         "Stop Biryulyovo Zapadnoye: 55.574371, 37.651700\n"
         "Stop Biryusinka: 55.581065, 37.648390\n"
@@ -37,7 +37,7 @@ TEST_CASE("Test stream input", "[input_reader]") {
         const auto& route = catalogue.GetRoute("750");
         REQUIRE(route.GetName() == "750");
         REQUIRE(route.GetStopsCount() == 3);
-        REQUIRE(route.GetUniqueStopsCount() == 3);
+        REQUIRE(route.GetUniqueStopsCount() == 2);
     }
 
     SECTION("GetRoute 256 parsed correctly") {

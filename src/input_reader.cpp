@@ -87,7 +87,11 @@ namespace transport_catalogue {
         while(true) {
             size_t delim_pos = request.find_first_of("->");
 
-            if(delim_pos == std::string::npos) break;
+            if(delim_pos == std::string::npos) {
+                const Stop* stop_ptr = &transport_catalogue.GetStop(request.substr(0, request.size()));
+                stop_ptrs.push_back(stop_ptr);
+                break;
+            }
             
             current_stop = request.substr(0, delim_pos - 1);
 
