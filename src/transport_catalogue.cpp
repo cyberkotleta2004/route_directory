@@ -3,6 +3,8 @@
 #include <stdexcept>
 #include <format>
 
+using namespace std::string_literals;
+
 namespace transport_catalogue {
     void TransportCatalogue::AddStop(Stop&& stop) {
         stops_.push_back(std::move(stop));
@@ -12,6 +14,10 @@ namespace transport_catalogue {
     void TransportCatalogue::AddRoute(Route&& route) {
         routes_.push_back(std::move(route));
         route_name_to_route_.insert({routes_.back().GetName(), &routes_.back()});
+    }
+
+    const Stop& TransportCatalogue::GetStop(std::string_view stop_name) const {
+        return *stop_name_to_stop_.at(stop_name);
     }
 
     const Stop& TransportCatalogue::GetStop(const std::string& stop_name) const {

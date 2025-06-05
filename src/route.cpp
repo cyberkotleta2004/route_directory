@@ -2,7 +2,7 @@
 #include <unordered_set>
 
 namespace transport_catalogue {
-    Route::Route(const std::string& name, std::vector<const Stop*>&& route)
+    Route::Route(std::string_view name, std::vector<const Stop*>&& route)
         : name_(name)
         , unique_stops_count_(CountUniqueStopsCount(route))
         , stops_count_(route.size())
