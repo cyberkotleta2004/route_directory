@@ -3,7 +3,7 @@
 #include <vector>
 #include "stop.h"
 
-namespace transport_catalogue {
+namespace tcat {
     class Route {
     private:
         std::string name_;
@@ -12,7 +12,7 @@ namespace transport_catalogue {
         double route_length_;
         std::vector<const Stop*> route_;
     public: 
-        Route(std::string_view name, std::vector<const Stop*>&& route);
+        Route(std::string_view name_sv, std::vector<const Stop*>&& route);
         
         std::string_view GetName() const noexcept;
         double GetLength() const noexcept;

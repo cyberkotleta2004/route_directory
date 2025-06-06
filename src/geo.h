@@ -4,10 +4,10 @@
 
 namespace geo {
     struct Coordinates {
-        double lat;
-        double lng;
+        double lat_;
+        double lng_;
         bool operator==(const Coordinates& other) const {
-            return lat == other.lat && lng == other.lng;
+            return lat_ == other.lat_ && lng_ == other.lng_;
         }
         bool operator!=(const Coordinates& other) const {
             return !(*this == other);
@@ -20,8 +20,8 @@ namespace geo {
             return 0;
         }
         static const double dr = 3.1415926535 / 180.;
-        return acos(sin(from.lat * dr) * sin(to.lat * dr)
-                    + cos(from.lat * dr) * cos(to.lat * dr) * cos(abs(from.lng - to.lng) * dr))
+        return acos(sin(from.lat_ * dr) * sin(to.lat_ * dr)
+                    + cos(from.lat_ * dr) * cos(to.lat_ * dr) * cos(abs(from.lng_ - to.lng_) * dr))
             * 6371000;
     }
 }

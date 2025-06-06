@@ -18,13 +18,13 @@ TEST_CASE("Test stream input", "[input_reader]") {
         "Stop Biryulyovo Passazhirskaya: 55.580999, 37.659164\n"
     );
 
-    auto catalogue = transport_catalogue::ReadTransportCatalogueCreateRequests(iss);
+    auto catalogue = tcat::ReadTransportCatalogueCreateRequests(iss);
 
     SECTION("GetStop return correct coordinates") {
         const auto& stop = catalogue.GetStop("Tolstopaltsevo");
         REQUIRE(stop.name_ == "Tolstopaltsevo");
-        REQUIRE(stop.coordinates_.lat == Catch::Approx(55.611087).epsilon(1e-3));
-        REQUIRE(stop.coordinates_.lng == Catch::Approx(37.208290).epsilon(1e-3));
+        REQUIRE(stop.coordinates_.lat_ == Catch::Approx(55.611087).epsilon(1e-3));
+        REQUIRE(stop.coordinates_.lng_ == Catch::Approx(37.208290).epsilon(1e-3));
     }
 
     SECTION("GetStop throws for nonexistent stop") {

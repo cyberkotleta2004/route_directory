@@ -26,13 +26,13 @@ TEST_CASE("Test stat request reader", "[stat_reader]") {
         "Bus 751\n"
     );
 
-    auto catalogue = transport_catalogue::ReadTransportCatalogueCreateRequests(database);
+    auto catalogue = tcat::ReadTransportCatalogueCreateRequests(database);
 
     std::ostringstream oss;
-    transport_catalogue::ReadStatRequests(catalogue, stat_requests, oss);
+    tcat::ParseStatRequests(catalogue, stat_requests, oss);
     std::string result = oss.str();
 
-    REQUIRE(result == "Bus 256: 6 stops on route, 5 unique stops, 4371.017261 route length\n"
-                       "Bus 750: 5 stops on route, 3 unique stops, 20939.483047 route length\n"
-                       "Bus 751: not found\n");
+    REQUIRE(result == "Bus 256: 6 stops on route, 5 unique stops, 4371.017261 route length"
+                       "Bus 750: 5 stops on route, 3 unique stops, 20939.483047 route length"
+                       "Bus 751: not found");
 }

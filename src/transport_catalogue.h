@@ -5,7 +5,7 @@
 #include "stop.h"
 #include "route.h"
 
-namespace transport_catalogue {
+namespace tcat {
     class TransportCatalogue {
     private:
         std::deque<Stop> stops_;

@@ -1,11 +1,11 @@
 #include "route.h"
 #include <unordered_set>
 
-namespace transport_catalogue {
-    Route::Route(std::string_view name, std::vector<const Stop*>&& route)
-        : name_(name)
-        , unique_stops_count_(CountUniqueStopsCount(route))
+namespace tcat {
+    Route::Route(std::string_view name_sv, std::vector<const Stop*>&& route)
+        : name_(name_sv)
         , stops_count_(route.size())
+        , unique_stops_count_(CountUniqueStopsCount(route))
         , route_length_(CountLength(route))
         , route_(std::move(route))
     {}
