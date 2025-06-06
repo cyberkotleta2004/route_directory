@@ -4,5 +4,5 @@
 
 // int main() {
 //     tcat::TransportCatalogue catalogue = tcat::ReadTransportCatalogueCreateRequests();
-//     tcat::GetRoutesStat(catalogue);
+//     tcat::WriteInfo(catalogue);
 // }
