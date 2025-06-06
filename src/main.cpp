@@ -2,7 +2,7 @@
 #include "input_reader.h"
 #include "stat_reader.h"
 
-int main() {
-    tcat::TransportCatalogue catalogue = tcat::ReadTransportCatalogueCreateRequests();
-    tcat::ParseStatRequests(catalogue);
-}
+// int main() {
+//     tcat::TransportCatalogue catalogue = tcat::ReadTransportCatalogueCreateRequests();
+//     tcat::GetRoutesStat(catalogue);
+// }

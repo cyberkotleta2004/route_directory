@@ -51,7 +51,7 @@ TEST_CASE("Test stream input", "[input_reader]") {
 
     SECTION("Route info for non-existent bus returns not found") {
         const auto info = catalogue.GetRouteInfo("999");
-        REQUIRE(info == "Bus 999: not found\n");
+        REQUIRE(info == "Bus 999: not found");
     }
 
     SECTION("GetRoute throws on invalid name") {

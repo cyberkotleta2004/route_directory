@@ -30,6 +30,6 @@ TEST_CASE("Class Transport catalogue works correctly", "[transport_catalogue]") 
     REQUIRE(transport_catalogue.GetRoute("1"s).GetName() == "1");
     REQUIRE_THROWS_AS(transport_catalogue.GetRoute("100"s), std::out_of_range);
     REQUIRE(transport_catalogue.GetRouteInfo("1"s) == 
-        "Bus 1: 5 stops on route, 4 unique stops, 264475.815467 route length\n"s);
-    REQUIRE(transport_catalogue.GetRouteInfo("100"s) == "Bus 100: not found\n"s);
+        "Bus 1: 5 stops on route, 4 unique stops, 264475.815467 route length"s);
+    REQUIRE(transport_catalogue.GetRouteInfo("100"s) == "Bus 100: not found"s);
 }
