@@ -10,7 +10,7 @@ TEST_CASE("Test stat request reader", "[stat_reader]") {
         "Stop Tolstopaltsevo: 55.611087, 37.208290\n"
         "Stop Marushkino: 55.595884, 37.209755\n"
         "Bus 256: Biryulyovo Zapadnoye > Biryusinka > Universam > Biryulyovo Tovarnaya > Biryulyovo Passazhirskaya > Biryulyovo Zapadnoye\n"
-        "Bus 750: Tolstopaltsevo > Marushkino > Tolstopaltsevo\n"
+        "Bus 750: Tolstopaltsevo - Marushkino - Rasskazovka\n"
         "Stop Rasskazovka: 55.632761, 37.333324\n"
         "Stop Biryulyovo Zapadnoye: 55.574371, 37.651700\n"
         "Stop Biryusinka: 55.581065, 37.648390\n"
@@ -33,6 +33,6 @@ TEST_CASE("Test stat request reader", "[stat_reader]") {
     std::string result = oss.str();
 
     REQUIRE(result == "Bus 256: 6 stops on route, 5 unique stops, 4371.017261 route length\n"
-                       "Bus 750: 3 stops on route, 2 unique stops, 3385.998798 route length\n"
+                       "Bus 750: 5 stops on route, 3 unique stops, 20939.483047 route length\n"
                        "Bus 751: not found\n");
 }

@@ -81,11 +81,12 @@ namespace transport_catalogue {
         name = request.substr(0, colon_pos);
         request.remove_prefix(name.size() + 2);
 
+        size_t stop_delim_pos = request.find_first_of(">-");
+        bool is_returning_route = request[stop_delim_pos] == '-' ? true : false;
         
         std::string_view current_stop;
-
         while(true) {
-            size_t delim_pos = request.find_first_of(">");
+            size_t delim_pos = request.find_first_of(">-");
 
             if(delim_pos == std::string::npos) {
                 const Stop* stop_ptr = &transport_catalogue.GetStop(request.substr(0, request.size()));
@@ -102,6 +103,14 @@ namespace transport_catalogue {
                 throw;
             }
             request.remove_prefix(current_stop.size() + 3);
+        }
+
+        if(is_returning_route) {
+            stop_ptrs.reserve(stop_ptrs.size() * 2 - 1);
+
+            for(int i = stop_ptrs.size() - 2; i >= 0; --i) {
+                stop_ptrs.push_back(stop_ptrs[i]);
+            }
         }
 
         return Route{name, std::move(stop_ptrs)};
