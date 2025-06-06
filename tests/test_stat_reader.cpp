@@ -29,7 +29,7 @@ TEST_CASE("Test stat request reader", "[stat_reader]") {
     auto catalogue = tcat::ReadTransportCatalogueCreateRequests(database);
 
     std::ostringstream oss;
-    tcat::GetRoutesStat(catalogue, stat_requests, oss);
+    tcat::WriteInfo(catalogue, stat_requests, oss);
     std::string result = oss.str();
 
     REQUIRE(result == "Bus 256: 6 stops on route, 5 unique stops, 4371.017261 route length\n"
