@@ -5,9 +5,8 @@
 
 using namespace std::string_literals;
 
-
 TEST_CASE("Class Transport catalogue works correctly", "[transport_catalogue]") {
-    SECTION("1 test case") {
+    SECTION("test case") {
 
         std::istringstream database_requests_s(
             "13\n"
@@ -38,8 +37,8 @@ TEST_CASE("Class Transport catalogue works correctly", "[transport_catalogue]") 
     
         std::ostringstream result;
     
-        tcat::TransportCatalogue catalogue = tcat::ReadTransportCatalogueCreateRequests(database_requests_s);
-        tcat::WriteInfo(catalogue, requests_to_database, result);
+        transport_catalogue::TransportCatalogue catalogue = transport_catalogue::ReadTransportCatalogueCreateRequests(database_requests_s);
+        transport_catalogue::WriteInfo(catalogue, requests_to_database, result);
     
         REQUIRE(result.str() == "Bus 256: 6 stops on route, 5 unique stops, 5950 route length, 1.361239 curvature\n"
                                 "Bus 750: 7 stops on route, 3 unique stops, 27400 route length, 1.308533 curvature\n"
@@ -49,6 +48,4 @@ TEST_CASE("Class Transport catalogue works correctly", "[transport_catalogue]") 
                                 "Stop Biryulyovo Zapadnoye: buses 256 828\n"
         );
     }
-
-    
 }
