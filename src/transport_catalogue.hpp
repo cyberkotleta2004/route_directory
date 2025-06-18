@@ -4,8 +4,8 @@
 #include <set>
 #include <utility>
 #include <string>
-#include "stop.h"
-#include "route.h"
+#include "stop.hpp"
+#include "route.hpp"
 
 namespace transport_catalogue {
 
@@ -28,14 +28,21 @@ public:
     void AddStop(Stop&& stop);
     void AddRoute(Route&& route);
     void SetDistanceBetweenStops(const Stop* first_stop, const Stop* second_stop, size_t distance);
+    void SetDistanceBetweenStops(const std::string& first_stop_name, const std::string& second_stop, size_t distance);
+
+    const Stop* GetStopPtr(std::string_view stop_name_sv) const;
+    const Route* GetRoutePtr(std::string_view route_name_sv) const;
     const Stop& GetStop(std::string_view stop_name_sv) const;
     const Route& GetRoute(std::string_view route_name_sv) const;
-    std::string GetRouteInfo(std::string_view route_name_sv) const;
-    std::string GetRoutesGoesThroughStop(std::string_view stop_name_sv) const;
+    size_t GetStopsCountOnRoute(std::string_view route_name_sv) const;
+    size_t GetUniqueStopsCountOnRoute(std::string_view route_name_sv) const;
+    size_t GetRouteLength(std::string_view route_name_sv) const;
+    double GetRouteCurvature(std::string_view route_name_sv) const;
+    std::vector<std::string> GetRoutesGoesThroughStop(std::string_view stop_name_sv) const;
+
 private:
-    double GetRouteGeographicLength(const Route& route) const;
-    size_t GetRouteRealLength(const Route& route) const;
-    double GetRouteCurvature(const Route& route) const;
+    double CountRouteGeographicLength(const Route* route) const;
+    size_t CountRouteRealLength(const Route* route) const;
 };
 
 } // namespace transport_catalogue

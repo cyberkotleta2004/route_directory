@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
-#include "stop.h"
+#include "stop.hpp"
 
 namespace transport_catalogue {
 
@@ -13,6 +13,7 @@ private:
     std::vector<const Stop*> stops_;
 public: 
     Route(std::string_view name_sv, std::vector<const Stop*>&& stops);
+    Route(std::string&& name, std::vector<const Stop*>&& stops);
     
     std::string_view GetName() const noexcept;
     size_t GetStopsCount() const noexcept;

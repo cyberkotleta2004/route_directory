@@ -1,4 +1,4 @@
-#include "route.h"
+#include "route.hpp"
 #include <unordered_set>
 
 namespace transport_catalogue {
@@ -9,6 +9,14 @@ Route::Route(std::string_view name_sv, std::vector<const Stop*>&& stops)
     , unique_stops_count_(CountUniqueStopsCount(stops))
     , stops_(std::move(stops))
 {}
+
+Route::Route(std::string&& name, std::vector<const Stop*>&& stops) 
+    : name_(std::move(name))
+    , stops_count_(stops.size())
+    , unique_stops_count_(CountUniqueStopsCount(stops))
+    , stops_(std::move(stops))
+{}
+
 
 std::string_view Route::GetName() const noexcept {
     std::string_view name_sv(name_);
