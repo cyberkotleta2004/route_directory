@@ -1,16 +1,34 @@
 #pragma once
 
 #include <cmath>
+#include <stdexcept>
 
 namespace geo {
 
 struct Coordinates {
+public:
     double lat_;
     double lng_;
-    bool operator==(const Coordinates& other) const {
+
+    Coordinates(double lat, double lng)
+        : lat_(lat)
+        , lng_(lng) 
+    {
+        if(lat_ < -90.0) {
+            throw std::invalid_argument("Latitude can not be less than -90.0!");
+        } else if (lat_ > 90.0) {
+            throw std::invalid_argument("Latitude can not be more than 90.0!");
+        } else if (lng_ < -180.0) {
+            throw std::invalid_argument("Longitude can not be less than -180.0!");
+        } else if (lng_ > 180.0) {
+            throw std::invalid_argument("Longitude can not be more than 180.0!");
+        }
+    }
+
+    bool operator==(const Coordinates& other) const noexcept {
         return lat_ == other.lat_ && lng_ == other.lng_;
     }
-    bool operator!=(const Coordinates& other) const {
+    bool operator!=(const Coordinates& other) const noexcept {
         return !(*this == other);
     }
 };

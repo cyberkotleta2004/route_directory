@@ -2,11 +2,6 @@
 #include "transport_catalogue.hpp"
 #include "json_parser.hpp"
 
-/*
-todo:
-    change .at() to []
-    change Route to Bus name
-*/
 namespace transport_catalogue {
 
 class TransportCatalogueRequestHandler {

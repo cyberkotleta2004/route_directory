@@ -21,17 +21,15 @@ void TransportCatalogue::AddStop(Stop&& stop) {
     stop_name_to_stop_.insert({stops_.back().name_, &stops_.back()});
 }
 
-void TransportCatalogue::AddRoute(Route&& route) {
-    std::string route_name(route.GetName());
+void TransportCatalogue::AddBus(Bus&& bus) {
+    buses_.push_back(std::move(bus));
 
-    routes_.push_back(std::move(route));
-
-    const Route* current_route_ptr = &routes_.back();
-    route_name_to_route_.insert({current_route_ptr->GetName(), current_route_ptr});
+    const Bus* current_bus_ptr = &buses_.back();
+    bus_name_to_bus_.insert({current_bus_ptr->GetNameSV(), current_bus_ptr});
 
 
-    for(const Stop* ptr : current_route_ptr->GetStopsPtrs()) {
-        stop_ptr_to_routes_ptrs_[ptr].insert(current_route_ptr);
+    for(const Stop* ptr : current_bus_ptr->GetStopsPtrs()) {
+        stop_ptr_to_bus_ptrs_[ptr].insert(current_bus_ptr);
     }
 }
 
@@ -54,8 +52,8 @@ const Stop* TransportCatalogue::GetStopPtr(std::string_view stop_name_sv) const 
     return stop_name_to_stop_.at(stop_name_sv);
 }
 
-const Route* TransportCatalogue::GetRoutePtr(std::string_view route_name_sv) const {
-    return route_name_to_route_.at(route_name_sv);
+const Bus* TransportCatalogue::GetBusPtr(std::string_view bus_name_sv) const {
+    return bus_name_to_bus_.at(bus_name_sv);
 }
 
 
@@ -63,74 +61,74 @@ const Stop& TransportCatalogue::GetStop(std::string_view stop_name_sv) const {
     return *stop_name_to_stop_.at(stop_name_sv);
 }
 
-const Route& TransportCatalogue::GetRoute(std::string_view route_name_sv) const {
-    return *route_name_to_route_.at(route_name_sv);
+const Bus& TransportCatalogue::GetBus(std::string_view bus_name_sv) const {
+    return *bus_name_to_bus_.at(bus_name_sv);
 }
 
-size_t TransportCatalogue::GetStopsCountOnRoute(std::string_view route_name_sv) const {
-    const Route* route_ptr = route_name_to_route_.at(route_name_sv);
-    size_t stops_count = route_ptr->GetStopsCount();
+size_t TransportCatalogue::GetStopsCountOnBus(std::string_view bus_name_sv) const {
+    const Bus* bus_ptr = bus_name_to_bus_.at(bus_name_sv);
+    size_t stops_count = bus_ptr->GetStopsCount();
     return stops_count;
 }
 
-size_t TransportCatalogue::GetUniqueStopsCountOnRoute(std::string_view route_name_sv) const {
-    const Route* route_ptr = route_name_to_route_.at(route_name_sv);
-    size_t unique_stops_count = route_ptr->GetUniqueStopsCount();
+size_t TransportCatalogue::GetUniqueStopsCountOnBus(std::string_view bus_name_sv) const {
+    const Bus* bus_ptr = bus_name_to_bus_.at(bus_name_sv);
+    size_t unique_stops_count = bus_ptr->GetUniqueStopsCount();
     return unique_stops_count;
 }
 
-size_t TransportCatalogue::GetRouteLength(std::string_view route_name_sv) const {
-    const Route* route_ptr = route_name_to_route_.at(route_name_sv);
-    size_t route_length = CountRouteRealLength(route_ptr);
-    return route_length;
+size_t TransportCatalogue::GetBusLength(std::string_view bus_name_sv) const {
+    const Bus* bus_ptr = bus_name_to_bus_.at(bus_name_sv);
+    size_t bus_length = CountBusRealLength(bus_ptr);
+    return bus_length;
 }
 
-double TransportCatalogue::GetRouteCurvature(std::string_view route_name_sv) const {
-    const Route* route_ptr = route_name_to_route_.at(route_name_sv);
+double TransportCatalogue::GetBusCurvature(std::string_view bus_name_sv) const {
+    const Bus* bus_ptr = bus_name_to_bus_.at(bus_name_sv);
 
-    double route_geographic_length = CountRouteGeographicLength(route_ptr);
-    size_t route_real_length = CountRouteRealLength(route_ptr);
-    double curvature = static_cast<double>(route_real_length) / route_geographic_length;
+    double bus_geographic_length = CountBusGeographicLength(bus_ptr);
+    size_t bus_real_length = CountBusRealLength(bus_ptr);
+    double curvature = static_cast<double>(bus_real_length) / bus_geographic_length;
 
     return curvature;
 }
 
 
-std::vector<std::string> TransportCatalogue::GetRoutesGoesThroughStop(std::string_view stop_name_sv) const {
+std::vector<std::string> TransportCatalogue::GetBusesGoesThroughStop(std::string_view stop_name_sv) const {
     const Stop* stop_ptr = stop_name_to_stop_.at(stop_name_sv);
-    std::set<const Route*> routes_ptrs = stop_ptr_to_routes_ptrs_.at(stop_ptr);
+    std::set<const Bus*> bus_ptrs = stop_ptr_to_bus_ptrs_.at(stop_ptr);
 
-    std::vector<std::string> routes_names;
+    std::vector<std::string> bus_names;
 
-    for(const Route* route_ptr : routes_ptrs) {
-        routes_names.push_back(std::string(route_ptr->GetName()));
+    for(const Bus* bus_ptr : bus_ptrs) {
+        bus_names.push_back(std::string(bus_ptr->GetName()));
     }
 
-    return routes_names;
+    return bus_names;
 }
 
-double TransportCatalogue::CountRouteGeographicLength(const Route* route) const {
-    double route_geographic_length = 0.0;
+double TransportCatalogue::CountBusGeographicLength(const Bus* bus) const {
+    double bus_geographic_length = 0.0;
 
-    auto stops_ptrs = route->GetStopsPtrs();
+    auto stops_ptrs = bus->GetStopsPtrs();
 
-    for(int i = 1; i < stops_ptrs.size(); ++i) {
-        route_geographic_length += geo::ComputeDistance(stops_ptrs[i - 1]->coordinates_, stops_ptrs[i]->coordinates_);
+    for(size_t i = 1; i < stops_ptrs.size(); ++i) {
+        bus_geographic_length += geo::ComputeDistance(stops_ptrs[i - 1]->coordinates_, stops_ptrs[i]->coordinates_);
     }
 
-    return route_geographic_length;
+    return bus_geographic_length;
 }
 
-size_t TransportCatalogue::CountRouteRealLength(const Route* route) const {
-    size_t route_real_length = 0;
+size_t TransportCatalogue::CountBusRealLength(const Bus* bus) const {
+    size_t bus_real_length = 0;
 
-    auto stop_ptrs = route->GetStopsPtrs();
+    auto stop_ptrs = bus->GetStopsPtrs();
 
-    for(int i = 0; i < stop_ptrs.size() - 1; ++i) {
-        route_real_length += stops_pair_to_distance_.at({stop_ptrs[i], stop_ptrs[i + 1]});
+    for(size_t i = 0; i < stop_ptrs.size() - 1; ++i) {
+        bus_real_length += stops_pair_to_distance_.at({stop_ptrs[i], stop_ptrs[i + 1]});
     }
 
-    return route_real_length;
+    return bus_real_length;
 }
 
 } // namespace transport_catalogue

@@ -7,9 +7,17 @@ using namespace std::string_literals;
 namespace transport_catalogue {
 
 json TransportCatalogueRequestHandler::HandleJSONBaseAndStatRequests(const json& json_input) {
-    ParseJSONBaseRequests(json_input.at("base_requests"));
-    return ParseJSONStatRequests(json_input.at("stat_requests"));
-    
+    try {
+        ParseJSONBaseRequests(json_input.at("base_requests"));
+        return ParseJSONStatRequests(json_input.at("stat_requests"));
+
+    } catch(const std::exception& e) {
+        std::cerr << "Error: " << e.what() << '\n';
+        return json{
+            {"error", e.what()},
+            {"status", "failed"}
+        };
+    } 
 }
 
 json TransportCatalogueRequestHandler::ParseJSONStatRequests(const json& stat_requests) {
@@ -17,19 +25,32 @@ json TransportCatalogueRequestHandler::ParseJSONStatRequests(const json& stat_re
 
     for(const auto& request : stat_requests) {
         json response;
-        response["request_id"] = request["id"];
+        response["request_id"] = request.at("id");
 
-        const std::string type = request["type"];
-        const std::string name = request["name"];
+        const std::string type = request.at("type");
+        const std::string name = request.at("name");
 
         if(type == "Bus") {
-            response["curvature"] = transport_catalogue_.GetRouteCurvature(name);
-            response["route_length"] = transport_catalogue_.GetRouteLength(name);
-            response["stop_count"] = transport_catalogue_.GetStopsCountOnRoute(name);
-            response["unique_stop_count"] = transport_catalogue_.GetUniqueStopsCountOnRoute(name);
+            try {
+                response["curvature"] = transport_catalogue_.GetBusCurvature(name);
+                response["route_length"] = transport_catalogue_.GetBusLength(name);
+                response["stop_count"] = transport_catalogue_.GetStopsCountOnBus(name);
+                response["unique_stop_count"] = transport_catalogue_.GetUniqueStopsCountOnBus(name);
+
+            } catch(const std::out_of_range& e) {
+                response["error_message"] = "not found";
+                responses.push_back(response);
+                continue;
+            }
         }
         else if(type == "Stop") {
-            response["buses"] = transport_catalogue_.GetRoutesGoesThroughStop(name);
+            try {
+                response["buses"] = transport_catalogue_.GetBusesGoesThroughStop(name);
+            } catch(const std::out_of_range& e) {
+                response["error_message"] = "not found";
+                responses.push_back(response);
+                continue;
+            }
         }
         
         responses.push_back(response);
@@ -88,13 +109,14 @@ void TransportCatalogueRequestHandler::AddBusFromJSON(const json& bus_json) {
     }
 
     if(bus_json.at("is_roundtrip").get<bool>() == false) {
-        for(auto it = stops.crbegin() + 1; it != stops.crend(); ++it) {
-            stops.push_back(*it);
+        stops.reserve(stops.size() * 2 - 1);
+        
+        for(size_t i = stops.size() - 1; i > 0; --i) {
+            stops.push_back(stops[i - 1]);
         }
     }
 
-    transport_catalogue_.AddRoute({std::move(name), std::move(stops)});
+    transport_catalogue_.AddBus({std::move(name), std::move(stops)});
 }
 
-
-};
+}; // namespace transport_catalogue

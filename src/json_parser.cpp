@@ -7,6 +7,11 @@ json JSONParser::FromStringToJSON(const std::string& input) {
     return data;
 }
 
+json JSONParser::FromStreamToJSON(std::istream& in) {
+    json data = json::parse(in);
+    return data;
+}
+
 std::string JSONParser::FromJSONToString(const json& json_input) {
     std::string json_string = json_input.dump();
     return json_string;
